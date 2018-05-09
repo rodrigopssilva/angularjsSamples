@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.6.1/angular.min.js"></script>
+  </head>
+  <body>
+    <div ng-app="demoApp" ng-controller="testeController">
+      <input type="text" ng-model="firstName" placeholder="Digite o seu nome...">
+      <input type="text" ng-model="lastName" placeholder="Digite o seu sobrenome...">
+      <input type="button" ng-click="postarDados()" value="postar"> <!-- função que irá realizar o POST do formulário -->
+      <div ng-if="firstName && lastName">
+	<h1>Olá {{firstName}} {{lastName}}</h1> <!-- Essa mensagem somente será exibida se firstName e lastName forem preenchidos -->
+      </div>
+    </div>
+    <script>
+      var demoApp = angular.module("demoApp", []);
+      demoApp.controller("testeController", function($scope, $http) {
+	
+	// inicializando as variáveis do formulário
+        $scope.firstName = "";
+        $scope.lastName = "";
+
+	$scope.postarDados = function() {
+	    // pego os dados dos inputs para realizar o POST
+	    var dados = {
+		firstName: $scope.firstName,
+		lastName: $scope.lastName
+	    };
+
+	    // realizando requisição POST
+	    $http.post('sua-url', dados).then(function(response) {
+		// somente irá entrar aqui quando o servidor retornar 200 OK
+		alert('enviado com sucesso!');
+	    },function(error){
+		// Irá entrar aqui caso o servidor retorne erro, ou seja, erro 500, 404, 403, 401...
+		alert('erro ao enviar requisição');
+		console.log(error);
+	    });
+	}
+      });
+    </script>
+  </body>
+</html>
